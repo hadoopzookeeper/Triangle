@@ -12,5 +12,6 @@ public class TriangleDriver {
 		
 		String[] TCDirArr = {args[1] + "/GraphData0", args[1] + "/GraphData1", args[1] + "/FinalResult"};
 		TriangleChecker.main(TCDirArr);
+		
 	}
 }

@@ -13,13 +13,6 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 public class TriangleChecker {
 	
-	private static long count = 0;
-	
-	public static long getCount()
-	{
-		return count;
-	}
-	
 	public static class TriangleCheckerMapper extends Mapper<Object, Text, Text, Text>
 	{
 		@Override
@@ -39,6 +32,8 @@ public class TriangleChecker {
 	
 	public static class TriangleCheckerReducer extends Reducer<Text, Text, Text, NullWritable>
 	{
+		private static long count = 0;
+
 		protected void reduce(Text key, Iterable<Text> values,
 				Reducer<Text, Text, Text, NullWritable>.Context context)
 				throws IOException, InterruptedException {
@@ -51,9 +46,9 @@ public class TriangleChecker {
 				String curVal = curText.toString();
 				if(curVal.equals("0"))
 				{
-					existFlag = true; 
+					existFlag = true;
 				}
-				else
+				else if(curVal.equals("1"))
 				{
 					curCnt++;
 				}
@@ -62,6 +57,15 @@ public class TriangleChecker {
 			{
 				count += curCnt;
 			}
+		}
+		
+		@Override
+		protected void cleanup(
+				Reducer<Text, Text, Text, NullWritable>.Context context)
+				throws IOException, InterruptedException {
+			
+			context.write(new Text(count + ""), NullWritable.get());
+			
 		}
 	}
 	
@@ -82,9 +86,6 @@ public class TriangleChecker {
 		FileInputFormat.addInputPath(job, new Path(args[1]));
 		FileOutputFormat.setOutputPath(job, new Path(args[2]));
 		
-		if(job.waitForCompletion(true))
-		{
-			System.out.println(TriangleChecker.getCount());
-		}
+		job.waitForCompletion(true);
 	}
 }
