@@ -22,9 +22,9 @@ public class GraphBuilder {
 			
 			String curLine = value.toString();
 			String[] idArr = curLine.split(" ");
-			Integer id1 = Integer.parseInt(idArr[0]);
-			Integer id2 = Integer.parseInt(idArr[1]);
-			if(id1 != id2)
+			Long id1 = Long.parseLong(idArr[0]);
+			Long id2 = Long.parseLong(idArr[1]);
+			if(!id1.equals(id2))
 			{
 				if(id1 > id2)
 				{
